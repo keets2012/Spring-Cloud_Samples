@@ -1,0 +1,71 @@
+spring:
+  application:
+      name: aoho-gateway
+  cloud:
+    consul:
+      host: 192.168.1.204
+      port: 8500
+      discovery:
+        ip-address: ${HOST_ADDRESS:localhost}
+        port: ${SERVER_PORT:${server.port}}
+#        healthCheckPath: /health
+        healthCheckInterval: 15s
+        instance-id: gateway-server-${server.port}
+        service-name: gateway-server
+
+server:
+  port: 9090
+
+management:
+  security:
+    enabled: false
+---
+test:
+  hostport: baidu.com
+#  hostport: localhost:5000
+  uri: http://${test.hostport}
+
+
+spring:
+  cloud:
+    gateway:
+      locator:
+        enabled: true
+      default-filters:
+      - AddResponseHeader=X-Response-Default-Foo, Default-Bar
+
+      routes:
+      # =====================================
+      - id: service_to_consul
+        uri: lb://user
+        order: 8000
+        predicates:
+        - Path=/user/**
+        filters:
+        - StripPrefix=1
+      # =====================================
+      # to run server
+      # $ wscat --listen 9000
+      # to run client
+      # $ wscat --connect ws://localhost:8080/echo
+      - id: websocket_test
+        uri: ws://localhost:9000
+        order: 9000
+        predicates:
+        - Path=/echo
+      # =====================================
+      - id: default_path_to_httpbin
+        uri: localhost:9090
+        order: 10000
+        predicates:
+        - Path=/**
+
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG
+    org.springframework.web.reactive: DEBUG
+    reactor.ipc.netty: DEBUG
+
+management.endpoints.web.exposure.include: '*'
