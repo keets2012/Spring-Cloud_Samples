@@ -21,7 +21,7 @@ management:
     enabled: false
 ---
 test:
-  hostport: baidu.com
+  hostport: blueskykong.com
 #  hostport: localhost:5000
   uri: http://${test.hostport}
 
