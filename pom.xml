@@ -9,6 +9,8 @@
 	<modules>
 		<module>spring-cloud-gateway-server</module>
 		<module>user-server</module>
+		<module>springboot-retry</module>
+		<module>springboot-test</module>
 	</modules>
 	<packaging>pom</packaging>
 
