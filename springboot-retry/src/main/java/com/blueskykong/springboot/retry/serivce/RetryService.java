@@ -9,5 +9,4 @@ import java.util.Map;
 public interface RetryService {
 
     String retry();
-    Map testRetry();
 }

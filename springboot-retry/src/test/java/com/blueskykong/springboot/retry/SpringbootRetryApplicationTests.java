@@ -11,25 +11,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@EnableRetry
 public class SpringbootRetryApplicationTests {
 
+    @Autowired
+    private PayService payService;
 
-	@Autowired
-	private RetryService retryService;
-
-	@Autowired
-	private PayService payService;
-
-
-	@Test
-	public void contextLoads() {
-		System.out.println(retryService.retry());
-	}
-
-	@Test
-	public void payTest() throws Exception {
-		payService.minGoodsnum(-1);
-	}
+    @Test
+    public void payTest() throws Exception {
+        int store = payService.minGoodsnum(-1);
+        System.out.println("库存为：" + store);
+    }
 
 }

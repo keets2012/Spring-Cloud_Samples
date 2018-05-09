@@ -25,27 +25,15 @@ public class RetryServiceImpl implements RetryService {
     @Retryable(include = {RetryException.class}, maxAttempts = 4, backoff = @Backoff(delay = 1000l, multiplier = 1))
     public String retry() {
         log.info("测试retry");
-        i++;//生产环境此处应该为调用第三方接口，判断接口返回code
+        //生产环境此处应该为调用第三方接口，判断接口返回code
         if (i == 30) {
-            return i + "";
+            return i++ + "";
         }
         log.info("============" + i);
         RetryException retryException = RetryException.builder().code("9999").message("连接超时").build();
         throw retryException;
     }
 
-    @Override
-    public Map testRetry() {
-        Map map = new HashMap();
-        String s = retry();
-        if (s.equals("3")) {
-            log.info("成功啦啦啦啦啦啦啦啦");
-        } else {
-            log.info("失败了");
-        }
-        map.put("result", s);
-        return map;
-    }
 
     @Recover
     public String recover(RetryException e) {
